@@ -38,9 +38,12 @@ dependencyResolutionManagement {
             version("android.buildToolsVersion", "34.0.0")
             version("android.minSdk", "26")
 
-            library("android.gradle", "com.android.tools.build:gradle:8.1.4")
-            plugin("android.library", "com.android.library").version("8.1.4")
-            plugin("android.application", "com.android.application").version("8.1.4")
+            // library("android.gradle", "com.android.tools.build:gradle:8.1.4")
+            // plugin("android.library", "com.android.library").version("8.1.4")
+            // plugin("android.application", "com.android.application").version("8.1.4")
+            library("android.gradle", "com.android.tools.build:gradle:7.4.1")
+            plugin("android.library", "com.android.library").version("7.4.1")
+            plugin("android.application", "com.android.application").version("7.4.1")
 
             // 当前 android 项目 kotlin 的版本
             library(

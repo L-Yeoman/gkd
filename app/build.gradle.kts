@@ -81,7 +81,7 @@ android {
         }
         debug {
             applicationIdSuffix = ".debug"
-            resValue("string", "app_name", "GKD-debug")
+            // resValue("string", "app_name", "GKD-debug")
         }
     }
     compileOptions {
