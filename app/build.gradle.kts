@@ -21,7 +21,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
 
-        applicationId = "li.songe.gkd"
+        applicationId = "com.quickly.kyd"
         versionCode = 14
         versionName = "1.5.4"
 
