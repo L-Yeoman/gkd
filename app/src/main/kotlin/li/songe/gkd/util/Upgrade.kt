@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.blankj.utilcode.util.AppUtils
+import com.blankj.utilcode.util.LogUtils
 import io.ktor.client.call.body
 import io.ktor.client.plugins.onDownload
 import io.ktor.client.request.get
@@ -139,10 +140,14 @@ fun UpgradeDialog() {
         AlertDialog(title = {
             Text(text = "检测到新版本")
         }, text = {
+            LogUtils.i("newVersionVal.versionLogs.size:${newVersionVal.versionLogs}")
             Text(text = "v${BuildConfig.VERSION_NAME} -> v${newVersionVal.versionName}\n\n${
-                if (newVersionVal.versionLogs.size > 1) {
-                    newVersionVal.versionLogs.joinToString("\n\n") { v -> "v${v.name}\n${v.desc}" }
-                } else if (newVersionVal.versionLogs.isNotEmpty()) {
+               /* if (newVersionVal.versionLogs.size > 1) {
+                    LogUtils.i("newVersionVal.versionLogs.size:${newVersionVal.versionLogs.size}")
+                    // newVersionVal.versionLogs.joinToString("\n\n") { v -> "v${v.name}\n${v.desc}" }
+                    "更新 更新 更新"
+                } else if (newVersionVal.versionLogs.isNotEmpty()) {*/
+                if (newVersionVal.versionLogs.isNotEmpty()) {
                     newVersionVal.versionLogs.first().desc
                 } else {
                     ""
