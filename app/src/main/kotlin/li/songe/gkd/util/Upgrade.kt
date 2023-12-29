@@ -1,5 +1,6 @@
 package li.songe.gkd.util
 
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -19,6 +20,8 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.onDownload
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsChannel
+import io.ktor.client.statement.readBytes
+import io.ktor.util.InternalAPI
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +33,7 @@ import li.songe.gkd.BuildConfig
 import li.songe.gkd.appScope
 import java.io.File
 import java.net.URI
+import java.util.Arrays
 
 @Serializable
 data class NewVersion(
@@ -46,6 +50,15 @@ data class VersionLog(
     val name: String,
     val code: Int,
     val desc: String,
+)
+
+@Serializable
+data class AdModel(
+    val jumpUrl: String,
+    val url: String,
+    val delayTime:Long,
+    val isShow: Int,
+    // val delayTime:Int,
 )
 
 val checkUpdatingFlow by lazy { MutableStateFlow(false) }
@@ -67,6 +80,19 @@ suspend fun checkUpdate(): NewVersion? {
         checkUpdatingFlow.value = false
     }
     return null
+}
+
+@OptIn(InternalAPI::class)
+suspend fun checkShowAd():AdModel?{
+    val adModel = client.get(AD_URL).body<AdModel>()
+    // val picByte = client.get(adModel.url).readBytes()
+    // adModel.pic = picByte
+    // Log.d("picByte", picByte.contentToString())
+    return adModel
+}
+
+suspend fun getAdByte(url:String):ByteArray{
+    return client.get(url).readBytes()
 }
 
 fun startDownload(newVersion: NewVersion) {

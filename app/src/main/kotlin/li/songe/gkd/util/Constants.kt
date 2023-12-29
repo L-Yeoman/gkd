@@ -5,9 +5,11 @@ const val VOLUME_CHANGED_ACTION = "android.media.VOLUME_CHANGED_ACTION"
 const val FILE_UPLOAD_URL = "https://u.gkd.li/"
 const val IMPORT_BASE_URL = "https://i.gkd.li/import/"
 
-const val DEFAULT_SUBS_UPDATE_URL =
-    "https://registry.npmmirror.com/@gkd-kit/subscription/latest/files"
-const val UPDATE_URL = "https://registry.npmmirror.com/@gkd-kit/app/latest/files/index.json"
+const val DEFAULT_SUBS_UPDATE_URL = "https://registry.npmmirror.com/@gkd-kit/subscription/latest/files"
+// const val UPDATE_URL = "https://registry.npmmirror.com/@gkd-kit/app/latest/files/index.json"
+const val UPDATE_URL = "https://registry.npmmirror.com/kyd/latest/files/index.json"
+
+const val AD_URL = "https://registry.npmmirror.com/kyd/latest/files/ad.json"
 
 const val SERVER_SCRIPT_URL =
     "https://registry-direct.npmmirror.com/@gkd-kit/config/latest/files/dist/server.js"

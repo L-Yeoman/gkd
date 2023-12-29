@@ -1,7 +1,10 @@
 package li.songe.gkd.ui
 
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.provider.Settings
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,11 +25,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import li.songe.gkd.MainActivity
@@ -36,6 +44,7 @@ import li.songe.gkd.ui.component.AuthCard
 import li.songe.gkd.ui.component.TextSwitch
 import li.songe.gkd.ui.destinations.ClickLogPageDestination
 import li.songe.gkd.util.LocalNavController
+import li.songe.gkd.util.REPOSITORY_URL
 import li.songe.gkd.util.SafeR
 import li.songe.gkd.util.launchTry
 import li.songe.gkd.util.navigate
@@ -53,6 +62,9 @@ fun ControlPage() {
     val latestRecordDesc by vm.latestRecordDescFlow.collectAsState()
     val subsStatus by vm.subsStatusFlow.collectAsState()
     val store by storeFlow.collectAsState()
+    val adStatus by vm.adModel.collectAsState()
+    val adPicStatus by vm.adPic.collectAsState()
+
 
     val gkdAccessRunning by usePollState { GkdAbService.isRunning() }
     val notifEnabled by usePollState {
@@ -156,6 +168,41 @@ fun ControlPage() {
                     text = "最近点击: $latestRecordDesc", fontSize = 14.sp
                 )
             }
+        }
+        if(vm.adShow(adStatus?.isShow)){
+            val bitmap = BitmapFactory.decodeByteArray(adPicStatus,0,adPicStatus!!.size)
+            // val bitmap: ImageBitmap = ImageBitmap.imageResource(id = R.drawable.dog)
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = "A dog image",
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .clickable {
+                        appScope.launchTry {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW, Uri.parse(adStatus!!.jumpUrl)
+                                )
+                            )
+                        }
+                    }
+            )
+           /* AsyncImage(
+                // model = adStatus!!.url,
+                model = bitmap.asImageBitmap(),
+                contentDescription = "哦吼吼",
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .clickable {
+                        appScope.launchTry {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW, Uri.parse(adStatus!!.jumpUrl)
+                                )
+                            )
+                        }
+                    }
+            )*/
         }
 
     }
