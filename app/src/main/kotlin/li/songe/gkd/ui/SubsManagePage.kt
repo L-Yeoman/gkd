@@ -248,7 +248,7 @@ fun SubsManagePage() {
                             .padding(16.dp))
                         Divider()
                     }
-                    if (subsRawVal?.supportUri != null) {
+                  /*  if (subsRawVal?.supportUri != null) {
                         Text(text = "问题反馈", modifier = Modifier
                             .clickable {
                                 menuSubItem = null
@@ -261,7 +261,7 @@ fun SubsManagePage() {
                             .fillMaxWidth()
                             .padding(16.dp))
                         Divider()
-                    }
+                    }*/
                     if (menuSubItemVal.id != -2L) {
                         Text(text = "删除订阅", modifier = Modifier
                             .clickable {

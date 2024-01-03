@@ -57,9 +57,11 @@ import li.songe.gkd.util.LocalNavController
 import li.songe.gkd.util.SafeR
 import li.songe.gkd.util.checkUpdate
 import li.songe.gkd.util.checkUpdatingFlow
+import li.songe.gkd.util.insertMediaPic
 import li.songe.gkd.util.launchTry
 import li.songe.gkd.util.logZipDir
 import li.songe.gkd.util.navigate
+import li.songe.gkd.util.shareDir
 import li.songe.gkd.util.storeFlow
 import li.songe.gkd.util.updateStorage
 import java.io.File
@@ -230,7 +232,7 @@ fun SettingsPage() {
             })
         Divider()
 
-        SettingItem(title = "分享日志", onClick = {
+        SettingItem(title = "分享应用", onClick = {
             vm.viewModelScope.launchTry(Dispatchers.IO) {
                 val logFiles = LogUtils.getLogFiles()
                 if (logFiles.isNotEmpty()) {
@@ -391,16 +393,37 @@ fun SettingsPage() {
                     val modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+
                     Text(
                         text = "调用系统分享", modifier = Modifier
                             .clickable(onClick = {
                                 showShareLogDlg = false
+                                /*  vm.viewModelScope.launchTry(Dispatchers.IO) {
+                                      val logZipFile = File(logZipDir, "log.zip")
+                                      ZipUtils.zipFiles(LogUtils.getLogFiles(), logZipFile)
+                                      val uri = FileProvider.getUriForFile(
+                                          context, "${context.packageName}.provider", logZipFile
+                                      )
+                                      val intent = Intent().apply {
+                                          action = Intent.ACTION_SEND
+                                          putExtra(Intent.EXTRA_STREAM, uri)
+                                          type = "application/zip"
+                                          addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                      }
+                                      context.startActivity(
+                                          Intent.createChooser(
+                                              intent, "分享日志文件"
+                                          )
+                                      )
+                                  }*/
                                 vm.viewModelScope.launchTry(Dispatchers.IO) {
-                                    val logZipFile = File(logZipDir, "log.zip")
-                                    ZipUtils.zipFiles(LogUtils.getLogFiles(), logZipFile)
+                                    val shareFile = File(shareDir, "shareImg.jpg")
+
                                     val uri = FileProvider.getUriForFile(
-                                        context, "${context.packageName}.provider", logZipFile
+                                        context, "${context.packageName}.provider", shareFile
                                     )
+
                                     val intent = Intent().apply {
                                         action = Intent.ACTION_SEND
                                         putExtra(Intent.EXTRA_STREAM, uri)
@@ -413,6 +436,16 @@ fun SettingsPage() {
                                             intent, "分享日志文件"
                                         )
                                     )
+                                }
+                            })
+                            .then(modifier)
+                    )
+                    Text(
+                        text = "保存相册手动分享", modifier = Modifier
+                            .clickable(onClick = {
+                                vm.viewModelScope.launchTry(Dispatchers.IO) {
+                                    val shareFile = File(shareDir, "shareImg.jpg")
+                                    insertMediaPic(context,shareFile)
                                 }
                             })
                             .then(modifier)

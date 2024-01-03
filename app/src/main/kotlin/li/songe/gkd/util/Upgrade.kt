@@ -59,6 +59,7 @@ data class AdModel(
     val url: String,
     val delayTime:Long,
     val isShow: Int,
+    val shareApp:String,
     // val delayTime:Int,
 )
 

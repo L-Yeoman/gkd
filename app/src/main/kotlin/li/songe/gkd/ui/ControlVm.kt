@@ -2,7 +2,8 @@ package li.songe.gkd.ui
 
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.text.TextUtils
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.LogUtils
@@ -14,8 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import li.songe.gkd.App
 import li.songe.gkd.app
 import li.songe.gkd.appScope
 import li.songe.gkd.db.DbSet
@@ -26,7 +25,12 @@ import li.songe.gkd.util.checkShowAd
 import li.songe.gkd.util.clickCountFlow
 import li.songe.gkd.util.getAdByte
 import li.songe.gkd.util.launchTry
+import li.songe.gkd.util.shareDir
 import li.songe.gkd.util.subsIdToRawFlow
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,12 +46,12 @@ class ControlVm @Inject constructor() : ViewModel() {
             val timeStamp = _AdInfo?.getLong("timestamp", 0)?:0
             val isShow = _AdInfo?.getInt("isShow", 1)?:1
             val curTime = System.currentTimeMillis()/1000L
-            LogUtils.i("AdTest","本地获取ad数据,adByte:$adByte,isShow:$isShow,jumpUrl:$jumpUrl,timeStamp:$timeStamp")
+            LogUtils.i("AdTest","本地获取ad数据,isShow:$isShow,jumpUrl:$jumpUrl,timeStamp:$timeStamp")
             // if(adByte?.isNotEmpty() == true&& jumpUrl?.isNotEmpty() == true&&curTime<timeStamp){
             if(curTime<timeStamp){
                 adPic.value = adByte?.decodeBase64Bytes()
-                adModel.value = AdModel(jumpUrl?:"","",0L,isShow)
-                LogUtils.i("AdTest","拿到本地ad数据,adPic.value:${adPic.value}")
+                adModel.value = AdModel(jumpUrl?:"","",0L,isShow,"")
+                // LogUtils.i("AdTest","拿到本地ad数据,adPic.value:${adPic.value}")
             }else{
                 getAdInfo()
             }
@@ -55,6 +59,7 @@ class ControlVm @Inject constructor() : ViewModel() {
     }
     //0显示  1不显示
     public fun adShow(value:Int?)= value==0
+
 
     private suspend fun getAdInfo(){
         try {
@@ -75,8 +80,28 @@ class ControlVm @Inject constructor() : ViewModel() {
         editor.putInt("isShow",adModel.value?.isShow?:1)
         editor.putLong("timestamp", System.currentTimeMillis()/1000L+delayTime)
         editor.commit() //提交修改
+        saveShareImg(adModel.value!!.shareApp)
+        // LogUtils.i("AdTest","请求网络数据并保存,adbyte:${adPic.value?.encodeBase64()},isShow:${adModel.value?.isShow},jumpUrl:${adModel.value?.jumpUrl},timestamp:${System.currentTimeMillis()/1000L+300L}")
+    }
 
-        LogUtils.i("AdTest","请求网络数据并保存,adbyte:${adPic.value?.encodeBase64()},isShow:${adModel.value?.isShow},jumpUrl:${adModel.value?.jumpUrl},timestamp:${System.currentTimeMillis()/1000L+300L}")
+    private suspend fun saveShareImg(url:String){
+        if(url?.isEmpty() == true){
+            return
+        }
+        val file = File(shareDir.getAbsolutePath(), "shareImg.jpg")
+        val imgByte= getAdByte(url)
+        val bmp: Bitmap =
+            BitmapFactory.decodeByteArray(imgByte, 0, imgByte.size)
+        try {
+            val outStream = FileOutputStream(file)
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+            outStream.write(imgByte)
+            outStream.close()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
     private val latestRecordFlow =
         DbSet.clickLogDao.queryLatest().stateIn(viewModelScope, SharingStarted.Eagerly, null)

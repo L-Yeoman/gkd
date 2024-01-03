@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.blankj.utilcode.util.ToastUtils
+import com.umeng.analytics.MobclickAgent
 import kotlinx.coroutines.Dispatchers
 import li.songe.gkd.MainActivity
 import li.songe.gkd.appScope
@@ -169,7 +170,7 @@ fun ControlPage() {
             // val bitmap: ImageBitmap = ImageBitmap.imageResource(id = R.drawable.dog)
             Image(
                 bitmap = bitmap.asImageBitmap(),
-                contentDescription = "A dog image",
+                contentDescription = "",
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .clickable {
@@ -180,6 +181,16 @@ fun ControlPage() {
                                 )
                             )
                         }
+                        val map: MutableMap<String, Any> = HashMap()
+                        map["jumpUrl"] = adStatus!!.jumpUrl
+
+                        map["url"] = adStatus!!.url
+
+                        map["isShow"] = "${adStatus!!.isShow}"
+
+                        map["delayTime"] = "${adStatus!!.delayTime}"
+
+                        MobclickAgent.onEventObject(context, "click_ad", map)
                     }
             )
            /* AsyncImage(
