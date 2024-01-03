@@ -417,7 +417,7 @@ fun SettingsPage() {
                             })
                             .then(modifier)
                     )
-                    Text(
+                  /*  Text(
                         text = "生成链接(需科学上网)", modifier = Modifier
                             .clickable(onClick = {
                                 showShareLogDlg = false
@@ -428,7 +428,7 @@ fun SettingsPage() {
                                 }
                             })
                             .then(modifier)
-                    )
+                    )*/
                 }
             }
         }

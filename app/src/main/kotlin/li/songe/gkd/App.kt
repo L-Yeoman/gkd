@@ -6,6 +6,7 @@ import android.os.Build
 import com.blankj.utilcode.util.LogUtils
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mmkv.MMKV
+import com.umeng.commonsdk.UMConfigure
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -25,7 +26,9 @@ private lateinit var _app: Application
 val app: Application
     get() = _app
 
-
+fun initUmeng(){
+    UMConfigure.init(app, "6593727395b14f599d0d69b8", "app", UMConfigure.DEVICE_TYPE_PHONE, "");
+}
 @HiltAndroidApp
 class App : Application() {
     override fun attachBaseContext(base: Context?) {
@@ -37,8 +40,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        UMConfigure.preInit(this,"6593727395b14f599d0d69b8","app")
+        // UMConfigure.setLogEnabled(true);
         _app = this
-
         @Suppress("SENSELESS_COMPARISON") if (BuildConfig.GKD_BUGLY_APP_ID != null) {
             CrashReport.setDeviceModel(this, DeviceInfo.instance.model)
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG)
@@ -75,4 +79,6 @@ class App : Application() {
             clearHttpSubs()
         }
     }
+
+
 }

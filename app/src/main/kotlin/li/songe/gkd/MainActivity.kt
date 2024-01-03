@@ -11,6 +11,7 @@ import com.dylanc.activityresult.launcher.PickContentLauncher
 import com.dylanc.activityresult.launcher.RequestPermissionLauncher
 import com.dylanc.activityresult.launcher.StartActivityLauncher
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.umeng.analytics.MobclickAgent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import li.songe.gkd.composition.CompositionActivity
@@ -29,7 +30,8 @@ import li.songe.gkd.util.storeFlow
 @AndroidEntryPoint
 class MainActivity : CompositionActivity({
     useLifeCycleLog()
-
+    initUmeng()
+    MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
     val launcher = StartActivityLauncher(this)
     val pickContentLauncher = PickContentLauncher(this)
     val requestPermissionLauncher = RequestPermissionLauncher(this)

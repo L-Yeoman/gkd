@@ -220,7 +220,7 @@ fun SnapshotPage() {
                     )
                     Divider()
                     if (snapshotVal.githubAssetId != null) {
-                        Text(
+                       /* Text(
                             text = "复制链接", modifier = Modifier
                                 .clickable(onClick = {
                                     selectedSnapshot = null
@@ -228,16 +228,16 @@ fun SnapshotPage() {
                                     ToastUtils.showShort("复制成功")
                                 })
                                 .then(modifier)
-                        )
+                        )*/
                     } else {
-                        Text(
+                      /*  Text(
                             text = "生成链接(需科学上网)", modifier = Modifier
                                 .clickable(onClick = {
                                     selectedSnapshot = null
                                     vm.uploadZip(snapshotVal)
                                 })
                                 .then(modifier)
-                        )
+                        )*/
                     }
                     Divider()
 
@@ -349,7 +349,9 @@ fun SnapshotPage() {
 
         is LoadStatus.Success -> {
             AlertDialog(title = { Text(text = "上传完成") }, text = {
+/*
                 Text(text = IMPORT_BASE_URL + uploadStatusVal.result.id)
+*/
             }, onDismissRequest = {}, dismissButton = {
                 TextButton(onClick = {
                     vm.uploadStatusFlow.value = null
@@ -358,7 +360,7 @@ fun SnapshotPage() {
                 }
             }, confirmButton = {
                 TextButton(onClick = {
-                    ClipboardUtils.copyText(IMPORT_BASE_URL + uploadStatusVal.result.id)
+                    // ClipboardUtils.copyText(IMPORT_BASE_URL + uploadStatusVal.result.id)
                     ToastUtils.showShort("复制成功")
                     vm.uploadStatusFlow.value = null
                 }) {

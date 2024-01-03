@@ -67,7 +67,7 @@ class ControlVm @Inject constructor() : ViewModel() {
 
         val adInfo: SharedPreferences = app.getSharedPreferences("Ad", MODE_PRIVATE)
         val editor = adInfo.edit()
-        val delayTime = adModel.value?.delayTime?:259200L//默认5天
+        val delayTime = adModel.value?.delayTime?:86400L//默认5天
         // val delayTime = 259200L //默认5天
 
         editor.putString("adbyte",adPic.value?.encodeBase64())

@@ -25,7 +25,6 @@ import li.songe.gkd.BuildConfig
 import li.songe.gkd.appScope
 import li.songe.gkd.util.LocalNavController
 import li.songe.gkd.util.ProfileTransitions
-import li.songe.gkd.util.REPOSITORY_URL
 import li.songe.gkd.util.launchTry
 
 @RootNavGraph
@@ -52,7 +51,7 @@ fun AboutPage() {
                 .padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row {
+           /* Row {
                 Text(text = "开源地址: ")
                 Text(text = REPOSITORY_URL,
                     color = MaterialTheme.colorScheme.primary,
@@ -67,7 +66,7 @@ fun AboutPage() {
                             )
                         }
                     })
-            }
+            }*/
             Text(text = "版本代码: " + BuildConfig.VERSION_CODE)
             Text(text = "版本名称: " + BuildConfig.VERSION_NAME)
             Text(text = "构建时间: " + BuildConfig.BUILD_DATE)

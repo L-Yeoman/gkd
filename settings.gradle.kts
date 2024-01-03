@@ -191,6 +191,8 @@ dependencyResolutionManagement {
 
 //            https://github.com/aclassen/ComposeReorderable
             library("others.reorderable", "org.burnoutcrew.composereorderable:reorderable:0.9.6")
+            library("umeng.common","com.umeng.umsdk:common:9.4.7")
+            library("umeng.asms","com.umeng.umsdk:asms:1.4.0")
         }
     }
 }

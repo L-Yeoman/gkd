@@ -22,8 +22,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
 
         applicationId = "com.quickly.kyd"
-        versionCode = 14
-        versionName = "1.5.4"
+        versionCode = 15
+        versionName = "1.5.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -185,4 +185,6 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
+    implementation(libs.umeng.common)
+    implementation(libs.umeng.asms)
 }

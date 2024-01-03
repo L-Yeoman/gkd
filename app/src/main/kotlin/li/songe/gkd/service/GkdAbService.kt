@@ -112,6 +112,7 @@ class GkdAbService : CompositionAbService({
     fun newQueryTask() {
         job = scope.launchTry(singleThread) {
             val activityRule = getCurrentRules()
+            LogUtils.i("activityRule",activityRule.rules)
             for (rule in (activityRule.rules)) {
                 if (!isActive && !rule.isOpenAd) break
                 if (!isAvailableRule(rule)) continue
@@ -132,6 +133,7 @@ class GkdAbService : CompositionAbService({
 
                 // 如果节点在屏幕外部, click 的结果为 null
                 val actionResult = rule.performAction(context, target)
+                LogUtils.i("actionResult",actionResult.action+","+actionResult.result)
                 if (actionResult.result) {
                     LogUtils.d(
                         *rule.matches.toTypedArray(),
@@ -151,11 +153,12 @@ class GkdAbService : CompositionAbService({
     }
     val skipAppIds = setOf("com.android.systemui")
     onAccessibilityEvent { event ->
+        LogUtils.i(this.javaClass.simpleName,event?.packageName)
         if (event == null || event.packageName == null) return@onAccessibilityEvent
         if (!(event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED)) return@onAccessibilityEvent
 
         if (skipAppIds.any { id -> id.contentEquals(event.packageName) }) return@onAccessibilityEvent
-
+        //TYPE_WINDOW_CONTENT_CHANGED 表示窗口的内容发生改变
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
             if (event.eventTime - appChangeTime > 5_000) { // app 启动 5s 内关闭限制
                 if (event.eventTime - lastContentEventTime < 100) {
