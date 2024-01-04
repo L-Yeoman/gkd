@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -54,7 +55,8 @@ import li.songe.gkd.ui.destinations.AboutPageDestination
 import li.songe.gkd.ui.destinations.DebugPageDestination
 import li.songe.gkd.util.LoadStatus
 import li.songe.gkd.util.LocalNavController
-import li.songe.gkd.util.SafeR
+import li.songe.gkd.util.authActionFlow
+import li.songe.gkd.util.canDrawOverlaysAuthAction
 import li.songe.gkd.util.checkUpdate
 import li.songe.gkd.util.checkUpdatingFlow
 import li.songe.gkd.util.insertMediaPic
@@ -67,11 +69,12 @@ import li.songe.gkd.util.updateStorage
 import java.io.File
 
 val settingsNav = BottomNavItem(
-    label = "设置", icon = SafeR.ic_cog, route = "settings"
+    label = "设置", icon = Icons.Default.Settings
 )
 
 @Composable
 fun SettingsPage() {
+    Icons.Default.Settings
     val context = LocalContext.current as MainActivity
     val navController = LocalNavController.current
     val store by storeFlow.collectAsState()
@@ -112,8 +115,8 @@ fun SettingsPage() {
             })
         Divider()
 
-        TextSwitch(name = "无障碍前台",
-            desc = "添加前台透明悬浮窗,关闭可能导致不工作",
+        TextSwitch(name = "前台悬浮窗",
+            desc = "添加透明悬浮窗,关闭可能导致不点击/点击缓慢",
             checked = store.enableAbFloatWindow,
             onCheckedChange = {
                 updateStorage(
@@ -131,14 +134,15 @@ fun SettingsPage() {
                 showToastInputDlg = true
             },
             onCheckedChange = {
+                if (it && !Settings.canDrawOverlays(context)) {
+                    authActionFlow.value = canDrawOverlaysAuthAction
+                    return@TextSwitch
+                }
                 updateStorage(
                     storeFlow, store.copy(
                         toastWhenClick = it
                     )
                 )
-                if (it && !Settings.canDrawOverlays(context)) {
-                    ToastUtils.showShort("需要悬浮窗权限")
-                }
             })
         Divider()
 

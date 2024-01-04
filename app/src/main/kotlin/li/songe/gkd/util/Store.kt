@@ -45,6 +45,7 @@ fun <T> updateStorage(stateFlow: StateFlow<T>, newState: T) {
 @Serializable
 data class Store(
     val enableService: Boolean = true,
+    val enableStatusService: Boolean = true,
     val excludeFromRecents: Boolean = false,
     val captureScreenshot: Boolean = false,
     val httpServerPort: Int = 8888,
@@ -59,7 +60,6 @@ data class Store(
     val log2FileSwitch: Boolean = true,
     val enableDarkTheme: Boolean? = null,
     val enableAbFloatWindow: Boolean = true,
-    val matchUnknownApp: Boolean = false,
 )
 
 val storeFlow by lazy {
