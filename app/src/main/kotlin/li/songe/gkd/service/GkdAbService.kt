@@ -142,7 +142,6 @@ class GkdAbService : CompositionAbService({
         }
         queryTaskJob = scope.launchTry(ctx) {
             val activityRule = getCurrentRules()
-            LogUtils.i("activityRule",activityRule.rules)
             for (rule in (activityRule.currentRules)) {
                 val statusCode = rule.status
                 if (statusCode == RuleStatus.Status3 && rule.matchDelayJob == null) {

@@ -21,7 +21,6 @@ import li.songe.gkd.db.DbSet
 import li.songe.gkd.util.AdModel
 import li.songe.gkd.util.allRulesFlow
 import li.songe.gkd.util.appInfoCacheFlow
-import li.songe.gkd.util.appRuleFlow
 import li.songe.gkd.util.checkShowAd
 import li.songe.gkd.util.clickCountFlow
 import li.songe.gkd.util.getAdByte
